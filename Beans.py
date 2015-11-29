@@ -16,16 +16,15 @@ class app(object):
 
     def menuEvent(self,rect1,rect2,rect3,rect4):
         #Menu event
-        self.game = game(self.screen,self.font)
         while True:
             event = pygame.event.wait()
             if event.type == MOUSEBUTTONDOWN:
                 if(event.pos[0] in range(rect1.left,rect1.right+1) and event.pos[1] in range(rect1.top,rect1.bottom+1)):
-                    self.game = game(self.screen,self.font)
+                    game(self.screen,self.font)
                 elif(event.pos[0] in range(rect2.left,rect2.right+1) and event.pos[1] in range(rect2.top,rect2.bottom+1)):
-                    self.demo = demo(self.screen)
+                    demo(self.screen,self.font)
                 elif(event.pos[0] in range(rect3.left,rect3.right+1) and event.pos[1] in range(rect3.top,rect3.bottom+1)):
-                    self.option = option(self.screen)
+                    option(self.screen)
                 elif(event.pos[0] in range(rect4.left,rect4.right+1) and event.pos[1] in range(rect4.top,rect4.bottom+1)):
                     sys.exit()
 
@@ -58,7 +57,7 @@ class game():
         #Create two players
         if Config.players_num == 1:
             self.player1 = Player.human(self.ui,"player1","Resource/cursor1.png","Resource/pick1.png",[110,440],self.ui.board)
-            self.player2 = Player.computer(self.ui,"player2","Resource/cursor2.png","Resource/pick2.png",[110,80],self.ui.board,0)
+            self.player2 = Player.computer(self.ui,"player2","Resource/cursor2.png","Resource/pick2.png",[110,80],self.ui.board,1)
         else:
             self.player1 = Player.human(self.ui,"player1","Resource/cursor1.png","Resource/pick1.png",[110,440],self.ui.board)
             self.player2 = Player.human(self.ui,"player2","Resource/cursor2.png","Resource/pick2.png",[110,80],self.ui.board)
@@ -76,7 +75,13 @@ class game():
 
 class demo():
     def __init__(self,screen,font):
+        self.screen = screen
+        self.font = font
+        self.draw()
+
+    def draw():
         pass
+
 
 class option():
     pass
