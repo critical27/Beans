@@ -40,7 +40,7 @@ class human():
         return True
 
 class computer():
-    def __init__(self,ui,name,icon1,icon2,pos,board,level=0):
+    def __init__(self,ui,name,icon1,icon2,pos,board,level):
         self.ui = ui
         self.name = name
         self.icon1 = icon1
@@ -48,14 +48,14 @@ class computer():
         self.pos = pos
         self.board = board
         self.level = level
-        if level == 0:
+        if level == 1:
             self.chooseMethod = Action.random()
         self.pickMethod = Action.playerOnePick(self.ui,self.icon2) if self.name == "player1" else Action.playerTwoPick(self.ui,self.icon2)
         self.plate_index = 0 if self.name == "player1" else 7
         self.bowl_index = 6 if self.name == "player1" else 13
 
     def play(self):
-        if self.level == 0:
+        if self.level == 1:
             self.choose()
             self.pick()
         else:
@@ -70,14 +70,21 @@ class computer():
     #Todo
     def choose(self):
         self.ui.draw(self.icon1,self.pos)
+        pygame.time.delay(300)
         startPos = self.ui.getPlateIndex(self.pos)
         validIndex = list(filter(lambda x:self.board[x] > 0,range(self.plate_index,self.bowl_index)))
         endPos = validIndex[random.randint(0,len(validIndex)-1)]
         if startPos != endPos:
             if startPos > endPos:
-                self.ui.slideRight(self.icon1,self.pos,(startPos-endPos)*100)
+                if self.name == "player1":
+                    self.ui.slideLeft(self.icon1,self.pos,(startPos-endPos)*100)
+                else:
+                    self.ui.slideRight(self.icon1,self.pos,(startPos-endPos)*100)
             elif startPos < endPos:
-                self.ui.slideLeft(self.icon1,self.pos,(endPos-startPos)*100)
+                if self.name == "player1":
+                    self.ui.slideRight(self.icon1,self.pos,(endPos-startPos)*100)
+                else:
+                    self.ui.slideLeft(self.icon1,self.pos,(endPos-startPos)*100)
             else:
                 pass
         self.ui.draw(self.icon1,self.pos)

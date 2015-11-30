@@ -124,28 +124,28 @@ class interface():
             assert()
         self.draw()
 
-    def slideLeft(self,icon,pos,dis,animationSpeed=300):
+    def slideLeft(self,icon,pos,dis):
         rangeX = (pos[0] - dis, pos[0])
         rangeY = (pos[1], pos[1])
-        self.slideAnimation(icon,pos[:],"left",rangeX,rangeY,animationSpeed)
+        self.slideAnimation(icon,pos[:],"left",rangeX,rangeY,Config.animation_speed)
         pos[0] -= dis
 
-    def slideRight(self,icon,pos,dis,animationSpeed=300):
+    def slideRight(self,icon,pos,dis):
         rangeX = (pos[0], pos[0] + dis)
         rangeY = (pos[1], pos[1])
-        self.slideAnimation(icon,pos[:],"right",rangeX,rangeY,animationSpeed)
+        self.slideAnimation(icon,pos[:],"right",rangeX,rangeY,Config.animation_speed)
         pos[0] += dis
 
-    def slideUp(self,icon,pos,dis,animationSpeed=300):
+    def slideUp(self,icon,pos,dis):
         rangeX = (pos[0], pos[0])
         rangeY = (pos[1] - dis, pos[1])
-        self.slideAnimation(icon,pos[:],"up",rangeX,rangeY,animationSpeed)
+        self.slideAnimation(icon,pos[:],"up",rangeX,rangeY,Config.animation_speed)
         pos[1] -= dis
 
-    def slideDown(self,icon,pos,dis,animationSpeed=300):
+    def slideDown(self,icon,pos,dis):
         rangeX = (pos[0], pos[0])
         rangeY = (pos[1], pos[1] + dis)
-        self.slideAnimation(icon,pos[:],"down",rangeX,rangeY,animationSpeed)
+        self.slideAnimation(icon,pos[:],"down",rangeX,rangeY,Config.animation_speed)
         pos[1] += dis
 
     #Get responding index of board according to current icon coordinate

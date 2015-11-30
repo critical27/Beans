@@ -11,18 +11,19 @@ class app(object):
         pygame.display.set_caption("Doodle")
         self.screen = pygame.display.set_mode((800,600))
         self.font = pygame.font.Font("Resource/simkai.ttf",32)
-        self.menu = menu(self.screen,self.font)
-        self.menuEvent(*self.menu.draw())
+        self.menu_event()
 
-    def menuEvent(self,rect1,rect2,rect3,rect4):
+    def menu_event(self):
         #Menu event
         while True:
+            self.menu = menu(self.screen,self.font)
+            rect1,rect2,rect3,rect4 = self.menu.draw()
             event = pygame.event.wait()
             if event.type == MOUSEBUTTONDOWN:
                 if(event.pos[0] in range(rect1.left,rect1.right+1) and event.pos[1] in range(rect1.top,rect1.bottom+1)):
                     game(self.screen,self.font)
                 elif(event.pos[0] in range(rect2.left,rect2.right+1) and event.pos[1] in range(rect2.top,rect2.bottom+1)):
-                    demo(self.screen,self.font)
+                    demo(self.screen)
                 elif(event.pos[0] in range(rect3.left,rect3.right+1) and event.pos[1] in range(rect3.top,rect3.bottom+1)):
                     option(self.screen)
                 elif(event.pos[0] in range(rect4.left,rect4.right+1) and event.pos[1] in range(rect4.top,rect4.bottom+1)):
@@ -52,12 +53,16 @@ class game():
         self.ui = Interface.interface(screen,font)
         self.player_init()
         self.run()
+        self.over()
 
     def player_init(self):
         #Create two players
-        if Config.players_num == 1:
+        if Config.players_num == 0:
+            self.player1 = Player.computer(self.ui,"player1","Resource/cursor1.png","Resource/pick1.png",[110,440],self.ui.board,1)
+            self.player2 = Player.computer(self.ui,"player2","Resource/cursor2.png","Resource/pick2.png",[110,80],self.ui.board,2)
+        elif Config.players_num == 1:
             self.player1 = Player.human(self.ui,"player1","Resource/cursor1.png","Resource/pick1.png",[110,440],self.ui.board)
-            self.player2 = Player.computer(self.ui,"player2","Resource/cursor2.png","Resource/pick2.png",[110,80],self.ui.board,1)
+            self.player2 = Player.computer(self.ui,"player2","Resource/cursor2.png","Resource/pick2.png",[110,80],self.ui.board,Config.level)
         else:
             self.player1 = Player.human(self.ui,"player1","Resource/cursor1.png","Resource/pick1.png",[110,440],self.ui.board)
             self.player2 = Player.human(self.ui,"player2","Resource/cursor2.png","Resource/pick2.png",[110,80],self.ui.board)
@@ -71,20 +76,80 @@ class game():
                 self.player1.play()
             if self.ui.isPlayerTwoValid():
                 self.player2.play()
+
+    #Todo
+    def over(self):
         print("Game Over")
 
-class demo():
-    def __init__(self,screen,font):
-        self.screen = screen
-        self.font = font
-        self.draw()
-
-    def draw():
-        pass
-
-
 class option():
-    pass
+    def __init__(self,screen):
+        self.screen = screen
+        self.font = pygame.font.Font("Resource/simkai.ttf",72)
+        self.draw()
+        self.option_event()
+
+    def draw(self):
+        self.screen.fill((253,246,227))
+        minus = pygame.image.load("Resource/minus.png")
+        self.rect_beans_minus = self.screen.blit(minus,(250 - minus.get_width() / 2,150 - minus.get_height() / 2))
+        self.rect_players_minus = self.screen.blit(minus,(250 - minus.get_width() / 2,300- minus.get_height() / 2))
+        self.rect_difficulty_minus = self.screen.blit(minus,(250 - minus.get_width() / 2,450 - minus.get_height() / 2))
+
+        plus = pygame.image.load("Resource/plus.png")
+        self.rect_beans_plus = self.screen.blit(plus,(550 - plus.get_width() / 2,150 - minus.get_height() / 2))
+        self.rect_players_plus = self.screen.blit(plus,(550 - plus.get_width() / 2,300 - minus.get_height() / 2))
+        self.rect_difficulty_plus = self.screen.blit(plus,(550 - plus.get_width() / 2,450 - minus.get_height() / 2))
+
+        beans_num = self.font.render(str(Config.beans_num),True,(0,0,0))
+        self.screen.blit(beans_num,(400 - beans_num.get_width() / 2, 150 - beans_num.get_height() / 2))
+        players_num = self.font.render(str(Config.players_num),True,(0,0,0))
+        self.screen.blit(players_num,(400 - players_num.get_width() / 2, 300 - players_num.get_height() / 2))
+        level = "Easy" if Config.level == 1 else "Hard"
+        difficulty = self.font.render(level,True,(0,0,0))
+        self.screen.blit(difficulty,(400 - difficulty.get_width() / 2, 450 - difficulty.get_height() / 2))
+
+        self.text_font = pygame.font.Font("Resource/simkai.ttf",48)
+        text_beans_num = self.text_font.render("Beans in Each Plate",True,(0,0,0))
+        self.screen.blit(text_beans_num,(400 - text_beans_num.get_width() / 2, 80 - text_beans_num.get_height() / 2))
+        text_players_num = self.text_font.render("Human Players",True,(0,0,0))
+        self.screen.blit(text_players_num,(400 - text_players_num.get_width() / 2, 230 - text_players_num.get_height() / 2))
+        text_difficulty = self.text_font.render("Difficulty",True,(0,0,0))
+        self.screen.blit(text_difficulty,(400 - text_difficulty.get_width() / 2, 380 - text_difficulty.get_height() / 2))
+        text_ok = self.text_font.render("ok",True,(0,0,0))
+        self.button_ok = self.screen.blit(text_ok,(400 - text_ok.get_width() / 2, 550 - text_ok.get_height() / 2))
+        pygame.display.update()
+
+    def option_event(self):
+        #Option event
+        while True:
+            event = pygame.event.wait()
+            if event.type == MOUSEBUTTONDOWN:
+                if(event.pos[0] in range(self.rect_beans_minus.left,self.rect_beans_minus.right+1) and event.pos[1] in range(self.rect_beans_minus.top,self.rect_beans_minus.bottom+1)):
+                    if Config.beans_num > 3:
+                        Config.beans_num -= 1
+                        self.draw()
+                elif(event.pos[0] in range(self.rect_beans_plus.left,self.rect_beans_plus.right+1) and event.pos[1] in range(self.rect_beans_plus.top,self.rect_beans_plus.bottom+1)):
+                    if Config.beans_num < 6:
+                        Config.beans_num += 1
+                        self.draw()
+                elif(event.pos[0] in range(self.rect_players_minus.left,self.rect_players_minus.right+1) and event.pos[1] in range(self.rect_players_minus.top,self.rect_players_minus.bottom+1)):
+                    if Config.players_num > 0:
+                        Config.players_num -= 1
+                        self.draw()
+                elif(event.pos[0] in range(self.rect_players_plus.left,self.rect_players_plus.right+1) and event.pos[1] in range(self.rect_players_plus.top,self.rect_players_plus.bottom+1)):
+                    if Config.players_num < 2:
+                        Config.players_num += 1
+                        self.draw()
+                elif(event.pos[0] in range(self.rect_difficulty_minus.left,self.rect_difficulty_minus.right+1) and event.pos[1] in range(self.rect_difficulty_minus.top,self.rect_difficulty_minus.bottom+1)):
+                    if Config.level > 1:
+                        Config.level -= 1
+                        self.draw()
+                elif(event.pos[0] in range(self.rect_difficulty_plus.left,self.rect_difficulty_plus.right+1) and event.pos[1] in range(self.rect_difficulty_plus.top,self.rect_difficulty_plus.bottom+1)):
+                    if Config.level < 2:
+                        Config.level += 1
+                        self.draw()
+                elif(event.pos[0] in range(self.button_ok.left,self.button_ok.right+1) and event.pos[1] in range(self.button_ok.top,self.button_ok.bottom+1)):
+                    break
 
 if __name__ == "__main__":
     beans = app()
