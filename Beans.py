@@ -23,7 +23,7 @@ class app(object):
                 if(event.pos[0] in range(rect1.left,rect1.right+1) and event.pos[1] in range(rect1.top,rect1.bottom+1)):
                     game(self.screen,self.font)
                 elif(event.pos[0] in range(rect2.left,rect2.right+1) and event.pos[1] in range(rect2.top,rect2.bottom+1)):
-                    demo(self.screen)
+                    demo(self.screen,self.font)
                 elif(event.pos[0] in range(rect3.left,rect3.right+1) and event.pos[1] in range(rect3.top,rect3.bottom+1)):
                     option(self.screen)
                 elif(event.pos[0] in range(rect4.left,rect4.right+1) and event.pos[1] in range(rect4.top,rect4.bottom+1)):
@@ -51,6 +51,8 @@ class menu():
 class game():
     def __init__(self,screen,font):
         self.ui = Interface.interface(screen,font)
+        self.screen = screen
+        self.font = font
         self.player_init()
         self.run()
         self.over()
@@ -77,9 +79,29 @@ class game():
             if self.ui.isPlayerTwoValid():
                 self.player2.play()
 
-    #Todo
     def over(self):
+        self.screen.fill((127,127,127))
+        text_game_over = "Player{0} win".format(1 if self.ui.score1 > self.ui.score2 else 2)
+        text_continue = "Press any key to continue"
+        surface_game_over = self.font.render(text_game_over,True,(255,255,255))
+        surface_continue = self.font.render(text_continue,True,(255,255,255))
+        self.screen.blit(surface_game_over,(400 - surface_game_over.get_width(),250 - surface_game_over.get_height()))
+        self.screen.blit(surface_continue,(400 - surface_continue.get_width(),350 - surface_continue.get_height()))
+        pygame.display.update()
+        while True:
+            event = pygame.event.wait()
+            if event.type == MOUSEBUTTONDOWN or event.type == KEYDOWN:
+                break
         print("Game Over")
+
+class Demo():
+    def __init__(self,screen,font):
+        self.screen = screen
+        self.font = font
+        self.run()
+
+    def run(self):
+        pass
 
 class option():
     def __init__(self,screen):

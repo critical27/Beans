@@ -34,10 +34,18 @@ class human():
         while True:
             rt = self.pickMethod.pick(self.pos[:],self.board)
             if rt == "Play Again" or rt == "Invalid Plate":
-                self.choose()
+                if self.name == "player1":
+                    if self.ui.isPlayerOneValid():
+                        self.choose()
+                    else:
+                        return
+                else:
+                    if self.ui.isPlayerTwoValid():
+                        self.choose()
+                    else:
+                        return
             else:
                 return
-        return True
 
 class computer():
     def __init__(self,ui,name,icon1,icon2,pos,board,level):
@@ -67,7 +75,6 @@ class computer():
                 self.move(self.max_record[i])
                 self.pickMethod.pick(self.pos[:],self.board)
 
-    #Todo
     def choose(self):
         self.ui.draw(self.icon1,self.pos)
         pygame.time.delay(300)
@@ -93,7 +100,12 @@ class computer():
         while True:
             rt = self.pickMethod.pick(self.pos[:],self.board)
             if rt == "Play Again" or rt == "Invalid Plate":
-                self.choose()
+                if self.name == "player1":
+                    if self.ui.isPlayerOneValid():
+                        self.choose()
+                else:
+                    if self.ui.isPlayerTwoValid():
+                        self.choose()
             else:
                 return
         return True
