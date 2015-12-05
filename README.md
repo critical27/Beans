@@ -7,7 +7,7 @@ Two players play in turn.
 The player can pick beans from his own plate, and put one bean into each other plate and bowl anti-clockwise until there is no more beans in your hand.  
 At the end of game, the player who has more beans wins.
 
-There are two special rules:
+There are two special rules:  
 1. When the player put the last bean into his own bowl, he can get a bonus play chance.  
 2. If player1 put the last bean into his own empty plate, this bean will directly score.  
     Meanwhile, take the opponent's beans in corresponding plate to player1's bowl.  
