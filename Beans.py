@@ -1,5 +1,6 @@
 import pygame
 from pygame.locals import *
+from sys import exit
 
 import Config
 import Player
@@ -27,7 +28,7 @@ class app(object):
                 elif(event.pos[0] in range(rect3.left,rect3.right+1) and event.pos[1] in range(rect3.top,rect3.bottom+1)):
                     option(self.screen)
                 elif(event.pos[0] in range(rect4.left,rect4.right+1) and event.pos[1] in range(rect4.top,rect4.bottom+1)):
-                    sys.exit()
+                    exit()
 
 class menu():
     def __init__(self,screen,font):
@@ -85,24 +86,32 @@ class game():
         text_continue = "Press any key to continue"
         surface_game_over = self.font.render(text_game_over,True,(255,255,255))
         surface_continue = self.font.render(text_continue,True,(255,255,255))
-        self.screen.blit(surface_game_over,(400 - surface_game_over.get_width(),250 - surface_game_over.get_height()))
-        self.screen.blit(surface_continue,(400 - surface_continue.get_width(),350 - surface_continue.get_height()))
+        self.screen.blit(surface_game_over,(400 - surface_game_over.get_width() / 2,250 - surface_game_over.get_height() / 2))
+        self.screen.blit(surface_continue,(400 - surface_continue.get_width() / 2,350 - surface_continue.get_height() / 2))
         pygame.display.update()
         while True:
             event = pygame.event.wait()
             if event.type == MOUSEBUTTONDOWN or event.type == KEYDOWN:
                 break
-        print("Game Over")
 
 #Todo
-class Demo():
+class demo():
     def __init__(self,screen,font):
         self.screen = screen
         self.font = font
-        self.run()
+        self.demo_event()
 
-    def run(self):
-        pass
+    def demo_event(self):
+        self.screen.fill((253,246,227))
+        text_demo = self.font.render("Please read the Readme.md, I am so lasy~",True,(0,0,0))
+        text_continue = self.font.render("Press any key to continue",True,(0,0,0))
+        self.screen.blit(text_demo,(400 - text_demo.get_width() / 2,250 - text_demo.get_height() / 2))
+        self.screen.blit(text_continue,(400 - text_continue.get_width() / 2,350 - text_continue.get_height() / 2))
+        pygame.display.update()
+        while True:
+            event = pygame.event.wait()
+            if event.type == MOUSEBUTTONDOWN or event.type == KEYDOWN:
+                break
 
 class option():
     def __init__(self,screen):
