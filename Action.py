@@ -49,7 +49,7 @@ class playerOnePick(pickMethod):
         self.ui.slideRight(self.icon,pos,100)
         index = self.ui.getPlateIndex(pos)
 
-        #if there are beans in hand
+        #If there are beans in hand
         while beans > 0:
             beans -= 1
             index = self.ui.getPlateIndex(pos)
@@ -85,7 +85,7 @@ class playerOnePick(pickMethod):
                     index = 0
             else:
                 assert()
-        #if last bean is put into own bowl, get a bonus play chance
+        #If last bean is put into own bowl, get a bonus play chance
         if index == 6:
             return "Play Again"
         return "Your Turn"
@@ -119,7 +119,7 @@ class playerTwoPick(pickMethod):
         self.ui.slideLeft(self.icon,pos,100)
         index = self.ui.getPlateIndex(pos)
 
-        #if there are beans in hand
+        #If there are beans in hand
         while beans > 0:
             beans -= 1
             index = self.ui.getPlateIndex(pos)
@@ -155,7 +155,7 @@ class playerTwoPick(pickMethod):
                     index = 0
             else:
                 assert()
-        #if last bean is put into own bowl, get a bonus play chance
+        #If last bean is put into own bowl, get a bonus play chance
         if index == 13:
             return "Play Again"
         return "Your Turn"

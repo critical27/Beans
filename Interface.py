@@ -18,7 +18,7 @@ class interface():
         #they make up the board, the length is 14 = (6 plates + 1 bowl) * 2
         self.board = self.plate1 + [self.score1] + self.plate2 + [self.score2]
 
-    #check if player has a non-empty plate
+    #Check if player has a non-empty plate
     def isPlayerOneValid(self):
         return self.plate1 != [0] * 6
 
@@ -26,7 +26,7 @@ class interface():
         return self.plate2 != [0] * 6
 
     #Draw the UI, icon and pos default to None
-    #display icon in coordinate pos
+    #Display icon in coordinate pos
     def draw(self,icon = None,pos = None):
         self.screen.fill((127,127,127))
         self.plate_init()

@@ -3,7 +3,10 @@ import Config
 import Action
 import random
 
-class human():
+class player():
+    pass
+
+class human(player):
     def __init__(self,ui,name,icon1,icon2,pos,board):
         self.ui = ui
         self.name = name
@@ -19,7 +22,7 @@ class human():
         self.pick()
 
     #Press space to select
-    #if it's not a empty plate,pick them
+    #If it's not a empty plate,pick them
     def choose(self):
         self.ui.draw(self.icon1,self.pos)
         while True:
@@ -29,7 +32,7 @@ class human():
             else:
                 self.ui.draw(self.icon1,self.pos)
 
-    #if you get a bonus play chance or select a empty plate, continue
+    #If you get a bonus play chance or select a empty plate, continue
     def pick(self):
         while True:
             rt = self.pickMethod.pick(self.pos[:],self.board)
@@ -47,7 +50,7 @@ class human():
             else:
                 return
 
-class computer():
+class computer(player):
     def __init__(self,ui,name,icon1,icon2,pos,board,level):
         self.ui = ui
         self.name = name
@@ -154,7 +157,7 @@ class computer():
             validIndex = list(filter(lambda x:board[x] > 0,range(self.plate_index,self.bowl_index)))
             self.max_record.append(validIndex[random.randint(0,len(validIndex)-1)])
 
-    #return True if it has a bonus play chance
+    #Return True if it has a bonus play chance
     def update_board(self,board,index):
         beans = board[index]
         board[index] = 0
