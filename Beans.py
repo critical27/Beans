@@ -136,7 +136,12 @@ class option():
         self.screen.blit(beans_num,(400 - beans_num.get_width() / 2, 150 - beans_num.get_height() / 2))
         players_num = self.font.render(str(Config.players_num),True,(0,0,0))
         self.screen.blit(players_num,(400 - players_num.get_width() / 2, 300 - players_num.get_height() / 2))
-        level = "Easy" if Config.level == 1 else "Hard"
+        if Config.level == 1:
+            level = "Easy"
+        elif Config.level == 2:
+            level = "Medium"
+        else:
+            level = "Hard"
         difficulty = self.font.render(level,True,(0,0,0))
         self.screen.blit(difficulty,(400 - difficulty.get_width() / 2, 450 - difficulty.get_height() / 2))
 
@@ -177,7 +182,7 @@ class option():
                         Config.level -= 1
                         self.draw()
                 elif(event.pos[0] in range(self.rect_difficulty_plus.left,self.rect_difficulty_plus.right+1) and event.pos[1] in range(self.rect_difficulty_plus.top,self.rect_difficulty_plus.bottom+1)):
-                    if Config.level < 2:
+                    if Config.level < 3:
                         Config.level += 1
                         self.draw()
                 elif(event.pos[0] in range(self.button_ok.left,self.button_ok.right+1) and event.pos[1] in range(self.button_ok.top,self.button_ok.bottom+1)):
