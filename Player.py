@@ -151,6 +151,7 @@ class computer(player):
         tmp_max_score = self.max_score
         tmp_max_board = self.max_board[:]
         tmp_max_record = self.max_record[:]
+        print(self.max_record)
 
         #Only adjust the last pick
         #Firstly, replay the former pick
@@ -163,17 +164,19 @@ class computer(player):
         for i in range(self.own_plate_index,self.own_bowl_index):
             if tmp_cur_board[i] == 0:
                 continue
+            print(tmp_cur_board)
             self.update_board(tmp_cur_board,i,self.own_plate_index,self.own_bowl_index)
+            print(tmp_cur_board)
             #Calculate the max score opponent can achieve
             self.max_score = tmp_max_score
             self.max_board = self.max_board[:]
-            self.dfs(self.board[:],1,self.oppo_plate_index,self.oppo_bowl_index)
+            self.dfs(tmp_cur_board[:],1,self.oppo_plate_index,self.oppo_bowl_index)
+            print(self.max_board)
 
             #After calling dfs, self.max_board will store the board after opponent play
             #Then get the score gap
-            print(self.max_board)
-            gap = (self.max_board[self.own_bowl_index] - self.board[self.own_bowl_index]) - \
-                  (self.max_board[self.oppo_bowl_index] - self.board[self.oppo_bowl_index])
+            gap = self.max_board[self.own_bowl_index] - self.max_board[self.oppo_bowl_index]
+            print(gap,diff)
             if gap > diff:
                 diff = gap
                 index = i
@@ -183,6 +186,7 @@ class computer(player):
         self.max_record = tmp_max_record[:]
         self.max_record.pop()
         self.max_record.append(index)
+        print(self.max_record)
 
     def dfs(self,board,depth,plate_index,bowl_index):
         temp_score = board[bowl_index]
