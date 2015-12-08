@@ -1,3 +1,5 @@
+#!/usr/bin/python
+#-*- coding: utf-8 -*-
 import pygame
 import Config
 import Action
@@ -137,14 +139,17 @@ class computer(player):
     def calculate(self):
         self.record = []
         self.max_score = self.board[self.own_bowl_index]
-        self.max_board = []
+        self.max_board = self.board[:]
         self.max_record = []
         self.dfs(self.board[:],1,self.own_plate_index,self.own_bowl_index)
 
+    #Todo:
     #Consider how the opponent will play, and adjust the pick order
     def rethink(self):
         #Store current information
         tmp_cur_board = self.board[:]
+        tmp_max_score = self.max_score
+        tmp_max_board = self.max_board[:]
         tmp_max_record = self.max_record[:]
 
         #Only adjust the last pick
@@ -155,15 +160,18 @@ class computer(player):
         diff = -100
         index = self.own_plate_index
         replay_board = tmp_cur_board[:]
-        for i in range(self.own_plate_index,self.own_plate_index):
+        for i in range(self.own_plate_index,self.own_bowl_index):
             if tmp_cur_board[i] == 0:
                 continue
             self.update_board(tmp_cur_board,i,self.own_plate_index,self.own_bowl_index)
             #Calculate the max score opponent can achieve
-            self.max_score = self.max_board[self.oppo_bowl_index]
+            self.max_score = tmp_max_score
+            self.max_board = self.max_board[:]
             self.dfs(self.board[:],1,self.oppo_plate_index,self.oppo_bowl_index)
+
             #After calling dfs, self.max_board will store the board after opponent play
             #Then get the score gap
+            print(self.max_board)
             gap = (self.max_board[self.own_bowl_index] - self.board[self.own_bowl_index]) - \
                   (self.max_board[self.oppo_bowl_index] - self.board[self.oppo_bowl_index])
             if gap > diff:
@@ -175,7 +183,6 @@ class computer(player):
         self.max_record = tmp_max_record[:]
         self.max_record.pop()
         self.max_record.append(index)
-        print(self.max_record)
 
     def dfs(self,board,depth,plate_index,bowl_index):
         temp_score = board[bowl_index]
@@ -186,7 +193,7 @@ class computer(player):
             if board[i] == 0:
                 continue
             else:
-                #When it has a bonus play chance, the score obviously is greater than current max_score
+                #When it has a bonus play chance, the score obviously >= than current max_score
                 if self.update_board(board,i,plate_index,bowl_index) == True:
                     self.record.append(i)
                     if board[bowl_index] > self.max_score:
@@ -198,9 +205,11 @@ class computer(player):
                 else:
                     if board[bowl_index] > self.max_score:
                         self.max_score = board[bowl_index]
+                        self.max_board = board[:]
                         self.max_record = self.record[:] + [i]
                 board = temp_board[:]
         if temp_score == self.max_score and len(self.max_record) == depth - 1:
+            print("!!!")
             validIndex = list(filter(lambda x:board[x] > 0,range(plate_index,bowl_index)))
             if len(validIndex) != 0:
                 index = random.randint(0,len(validIndex)-1)
