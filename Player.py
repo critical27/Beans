@@ -129,9 +129,15 @@ class computer(player):
         startPos = self.ui.getPlateIndex(self.pos)
         if startPos != endPos:
             if startPos > endPos:
-                self.ui.slideRight(self.icon1,self.pos,(startPos-endPos)*100)
+                if self.name == "player1":
+                    self.ui.slideLeft(self.icon1,self.pos,(startPos-endPos)*100)
+                else:
+                    self.ui.slideRight(self.icon1,self.pos,(startPos-endPos)*100)
             elif startPos < endPos:
-                self.ui.slideLeft(self.icon1,self.pos,(endPos-startPos)*100)
+                if self.name == "player1":
+                    self.ui.slideRight(self.icon1,self.pos,(endPos-startPos)*100)
+                else:
+                    self.ui.slideLeft(self.icon1,self.pos,(endPos-startPos)*100)
             else:
                 pass
         self.ui.draw(self.icon1,self.pos)
@@ -151,7 +157,8 @@ class computer(player):
         tmp_max_score = self.max_score
         tmp_max_board = self.max_board[:]
         tmp_max_record = self.max_record[:]
-        print(self.max_record)
+        choice = []
+        #print(self.max_record)
 
         #Only adjust the last pick
         #Firstly, replay the former pick
@@ -159,34 +166,34 @@ class computer(player):
             self.update_board(tmp_cur_board,self.max_record[i],self.own_plate_index,self.own_bowl_index)
         #store the difference between own score gap ane opponent's score gap
         diff = -100
-        index = self.own_plate_index
         replay_board = tmp_cur_board[:]
         for i in range(self.own_plate_index,self.own_bowl_index):
             if tmp_cur_board[i] == 0:
                 continue
-            print(tmp_cur_board)
+            #print(tmp_cur_board)
             self.update_board(tmp_cur_board,i,self.own_plate_index,self.own_bowl_index)
-            print(tmp_cur_board)
+            #print(tmp_cur_board)
             #Calculate the max score opponent can achieve
             self.max_score = tmp_max_score
             self.max_board = self.max_board[:]
             self.dfs(tmp_cur_board[:],1,self.oppo_plate_index,self.oppo_bowl_index)
-            print(self.max_board)
+            #print(self.max_board)
 
             #After calling dfs, self.max_board will store the board after opponent play
             #Then get the score gap
             gap = self.max_board[self.own_bowl_index] - self.max_board[self.oppo_bowl_index]
-            print(gap,diff)
             if gap > diff:
                 diff = gap
-                index = i
+                choice = [i]
+            elif gap == diff:
+                choice.append(i)
             #Restore the state
             tmp_cur_board = replay_board[:]
         #After the loop above, the index store the last pick, adjust the origin pick order
         self.max_record = tmp_max_record[:]
         self.max_record.pop()
-        self.max_record.append(index)
-        print(self.max_record)
+        self.max_record.append(random.choice(choice))
+        #print(self.max_record)
 
     def dfs(self,board,depth,plate_index,bowl_index):
         temp_score = board[bowl_index]
@@ -213,7 +220,6 @@ class computer(player):
                         self.max_record = self.record[:] + [i]
                 board = temp_board[:]
         if temp_score == self.max_score and len(self.max_record) == depth - 1:
-            print("!!!")
             validIndex = list(filter(lambda x:board[x] > 0,range(plate_index,bowl_index)))
             if len(validIndex) != 0:
                 index = random.randint(0,len(validIndex)-1)

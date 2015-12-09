@@ -38,6 +38,7 @@ class pickMethod():
 
 class playerOnePick(pickMethod):
     def pick(self,pos,board):
+        print(1)
         index = self.ui.getPlateIndex(pos)
         beans = board[index]
         if beans == 0:
@@ -108,6 +109,7 @@ class playerOnePick(pickMethod):
 
 class playerTwoPick(pickMethod):
     def pick(self,pos,board):
+        print(2)
         index = self.ui.getPlateIndex(pos)
         beans = board[index]
         if beans == 0:

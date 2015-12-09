@@ -61,7 +61,7 @@ class game():
     def player_init(self):
         #Create two players
         if Config.players_num == 0:
-            self.player1 = Player.computer(self.ui,"player1","Resource/cursor1.png","Resource/pick1.png",[110,440],self.ui.board,1)
+            self.player1 = Player.computer(self.ui,"player1","Resource/cursor1.png","Resource/pick1.png",[110,440],self.ui.board,3)
             self.player2 = Player.computer(self.ui,"player2","Resource/cursor2.png","Resource/pick2.png",[110,80],self.ui.board,2)
         elif Config.players_num == 1:
             self.player1 = Player.human(self.ui,"player1","Resource/cursor1.png","Resource/pick1.png",[110,440],self.ui.board)
